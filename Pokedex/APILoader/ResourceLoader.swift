@@ -16,15 +16,6 @@ protocol ResourceLoader {
     func load(completion: @escaping (ResourceLoaderResult) -> Void)
 }
 
-public enum HTTPClientResult {
-    case success(Data, HTTPURLResponse)
-    case failure(Error)
-}
-
-public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void)
-}
-
 public final class RemoteResourceLoader {
     private let url: URL
     private let client: HTTPClient
@@ -57,15 +48,5 @@ public final class RemoteResourceLoader {
                 completion(.failure(Error.connectivity))
             }
         }
-    }
-}
-
-private class ListMapper {
-    static func map(_ data: Data, _ response: HTTPURLResponse) throws -> List {
-        guard response.statusCode == 200 else {
-            throw RemoteResourceLoader.Error.invalidData
-        }
-        
-        return try JSONDecoder().decode(List.self, from: data)
     }
 }
