@@ -53,11 +53,13 @@ class RemoteResourceLoaderTests: XCTestCase {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon")!
         
         let (sut, client) = makeSUT(url: url)
+    
+        let listJson = makeJson(items: [])
         
-        [199, 200, 300, 400, 500].enumerated().forEach { (index, code) in
+        [199, 201, 300, 400, 500].enumerated().forEach { (index, code) in
             
             expect(sut, toCompleteWith: .failure(.invalidData), when: {
-                client.complete(withStatusCode: code, at: index)
+                client.complete(withStatusCode: code, data: listJson, at: index)
             })
         }
     }
@@ -76,15 +78,17 @@ class RemoteResourceLoaderTests: XCTestCase {
     func test_load_deliversNoItemsOnHTTP200EmptyJSONList() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .success(nil), when: {
-            let emptyJSON = Data("{\"results\": []}".utf8)
+        let list = List(count: 1, next: nil, previous: nil, results: [])
+        
+        expect(sut, toCompleteWith: .success(list), when: {
+            let emptyJSON = makeJson(items: [])
             client.complete(withStatusCode: 200, data: emptyJSON)
         })
     }
     
     func test_load_deliversItemsOnHTTP200WithJSON() {
         let (sut, client) = makeSUT()
-        
+
         let item1 = Item(name: "poke1", url: URL(string: "https://a.com")!)
         let item1JSon = [
             "name": "poke1",
@@ -95,17 +99,13 @@ class RemoteResourceLoaderTests: XCTestCase {
             "name": "poke2",
             "url": "https://b.com"
         ]
-        
+
         let list = List(count: 1, next: nil, previous: nil, results: [item1, item2])
-        
-        let listJson = [
-            "count": 1,
-            "results": [item1JSon, item2JSon]
-        ] as [String : Any]
-        
+
+        let listJson = makeJson(items: [item1JSon, item2JSon])
+
         expect(sut, toCompleteWith: .success(list), when: {
-            let json = try! JSONSerialization.data(withJSONObject: listJson, options: .prettyPrinted)
-            client.complete(withStatusCode: 200, data: json)
+            client.complete(withStatusCode: 200, data: listJson)
         })
     }
     
@@ -116,6 +116,15 @@ class RemoteResourceLoaderTests: XCTestCase {
         let sut =  RemoteResourceLoader(url: url, client: client)
         
         return (sut, client)
+    }
+    
+    private func makeJson(items: [[String: Any]]) -> Data {
+        let listJson = [
+            "count": 1,
+            "results": items
+        ] as [String : Any]
+        
+        return try! JSONSerialization.data(withJSONObject: listJson, options: .prettyPrinted)
     }
     
     private func expect(_ sut: RemoteResourceLoader, toCompleteWith result: RemoteResourceLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
@@ -141,7 +150,7 @@ class RemoteResourceLoaderTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
             let response = HTTPURLResponse(url: requestedURLs[index],
                                            statusCode: code,
                                            httpVersion: nil,
