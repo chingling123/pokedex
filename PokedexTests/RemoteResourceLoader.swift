@@ -111,9 +111,14 @@ class RemoteResourceLoaderTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT(url: URL = URL(string: "https://test.com")!) -> (sut: RemoteResourceLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "https://test.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteResourceLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut =  RemoteResourceLoader(url: url, client: client)
+        
+        addTeardownBlock { [weak sut, weak client] in
+            XCTAssertNil(client, "Instance not deallocated. Potential memory leak.", file: file, line: line)
+            XCTAssertNil(sut, "Instance not deallocated. Potential memory leak.", file: file, line: line)
+        }
         
         return (sut, client)
     }

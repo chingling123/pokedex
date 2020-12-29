@@ -39,11 +39,7 @@ public final class RemoteResourceLoader {
         client.get(from: url) { result in
             switch result {
             case .success(let data, let response):
-                if let list = try? ListMapper.map(data, response) {
-                    completion(.success(list))
-                } else {
-                    completion(.failure(Error.invalidData))
-                }
+                completion(ListMapper.map(data, response: response))
             case .failure:
                 completion(.failure(Error.connectivity))
             }
