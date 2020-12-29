@@ -48,8 +48,8 @@ public final class RemoteResourceLoader {
         client.get(from: url) { result in
             switch result {
             case .success(let data, _):
-                if let _ = try? JSONSerialization.jsonObject(with: data) {
-                    completion(.success(nil))
+                if let json = try? JSONDecoder().decode(List.self, from: data) {
+                    completion(.success(json))
                 } else {
                     completion(.failure(Error.invalidData))
                 }

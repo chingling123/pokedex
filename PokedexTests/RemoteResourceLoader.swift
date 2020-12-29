@@ -82,6 +82,33 @@ class RemoteResourceLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversItemsOnHTTP200WithJSON() {
+        let (sut, client) = makeSUT()
+        
+        let item1 = Item(name: "poke1", url: URL(string: "https://a.com")!)
+        let item1JSon = [
+            "name": "poke1",
+            "url": "https://a.com"
+        ]
+        let item2 = Item(name: "poke2", url: URL(string: "https://b.com")!)
+        let item2JSon = [
+            "name": "poke2",
+            "url": "https://b.com"
+        ]
+        
+        let list = List(count: 1, next: nil, previous: nil, results: [item1, item2])
+        
+        let listJson = [
+            "count": 1,
+            "results": [item1JSon, item2JSon]
+        ] as [String : Any]
+        
+        expect(sut, toCompleteWith: .success(list), when: {
+            let json = try! JSONSerialization.data(withJSONObject: listJson, options: .prettyPrinted)
+            client.complete(withStatusCode: 200, data: json)
+        })
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://test.com")!) -> (sut: RemoteResourceLoader, client: HTTPClientSpy) {
