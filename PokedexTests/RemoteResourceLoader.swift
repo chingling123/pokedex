@@ -56,13 +56,15 @@ class RemoteResourceLoaderTests: XCTestCase {
         
         let (sut, client) = makeSUT(url: url)
         
-        var capturedErrors = [RemoteResourceLoader.Error]()
-        sut.load { capturedErrors.append($0) }
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(withStatusCode: 400)
-        
-        XCTAssertEqual(capturedErrors, [.invalidData])
+        [199, 200, 300, 400, 500].enumerated().forEach { (index, code) in
+            
+            var capturedErrors = [RemoteResourceLoader.Error]()
+            sut.load { capturedErrors.append($0) }
+            
+            client.complete(withStatusCode: code, at: index)
+            
+            XCTAssertEqual(capturedErrors, [.invalidData])
+        }
     }
     
     // MARK: Helpers
