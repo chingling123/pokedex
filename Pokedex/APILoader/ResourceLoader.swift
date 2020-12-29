@@ -17,7 +17,7 @@ protocol ResourceLoader {
 }
 
 public enum HTTPClientResult {
-    case sucess(Data, HTTPURLResponse)
+    case success(Data, HTTPURLResponse)
     case failure(Error)
 }
 
@@ -34,18 +34,27 @@ public final class RemoteResourceLoader {
         case invalidData
     }
     
+    public enum Result: Equatable {
+        case success(List?)
+        case failure(Error)
+    }
+    
     public init(url: URL, client: HTTPClient) {
         self.client = client
         self.url = url
     }
     
-    public func load(completion: @escaping (Error) -> Void) {
+    public func load(completion: @escaping (Result) -> Void) {
         client.get(from: url) { result in
             switch result {
-            case .sucess:
-                completion(.invalidData)
+            case .success(let data, _):
+                if let _ = try? JSONSerialization.jsonObject(with: data) {
+                    completion(.success(nil))
+                } else {
+                    completion(.failure(Error.invalidData))
+                }
             case .failure:
-                completion(.connectivity)
+                completion(.failure(Error.connectivity))
             }
         }
     }

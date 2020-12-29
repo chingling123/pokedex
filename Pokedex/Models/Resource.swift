@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct List {
+public struct List: Equatable {
     var count: Int
     var next: URL?
     var previous: URL?
@@ -15,7 +15,7 @@ struct List {
 }
 
 
-struct Item {
+public struct Item: Equatable {
     var name: String
     var url: URL
 }

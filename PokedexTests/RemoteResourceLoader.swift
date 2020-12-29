@@ -73,6 +73,18 @@ class RemoteResourceLoaderTests: XCTestCase {
         
     }
     
+    func test_load_deliversNoItemsOnHTTP200EmptyJSONList() {
+        let (sut, client) = makeSUT()
+        
+        var capturedResults = [RemoteResourceLoader.Result]()
+        sut.load { capturedResults.append($0)}
+    
+        let emptyJSON = Data("{\"results\": []}".utf8)
+        client.complete(withStatusCode: 200, data: emptyJSON)
+        
+        XCTAssertEqual(capturedResults, [.success(nil)])
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://test.com")!) -> (sut: RemoteResourceLoader, client: HTTPClientSpy) {
@@ -83,12 +95,12 @@ class RemoteResourceLoaderTests: XCTestCase {
     }
     
     private func expect(_ sut: RemoteResourceLoader, toCompleteWithError error: RemoteResourceLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        var capturedErrors = [RemoteResourceLoader.Error]()
-        sut.load { capturedErrors.append($0) }
+        var capturedResults = [RemoteResourceLoader.Result]()
+        sut.load { capturedResults.append($0) }
         
         action()
         
-        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
+        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
     }
     
     private class HTTPClientSpy: HTTPClient {
@@ -110,7 +122,7 @@ class RemoteResourceLoaderTests: XCTestCase {
                                            statusCode: code,
                                            httpVersion: nil,
                                            headerFields: nil)!
-            messages[index].completion(.sucess(data, response))
+            messages[index].completion(.success(data, response))
         }
     }
 }
