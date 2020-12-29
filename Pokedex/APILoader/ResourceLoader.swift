@@ -48,8 +48,8 @@ public final class RemoteResourceLoader {
         client.get(from: url) { result in
             switch result {
             case .success(let data, let response):
-                if response.statusCode == 200, let json = try? JSONDecoder().decode(List.self, from: data) {
-                    completion(.success(json))
+                if let list = try? ListMapper.map(data, response) {
+                    completion(.success(list))
                 } else {
                     completion(.failure(Error.invalidData))
                 }
@@ -57,5 +57,15 @@ public final class RemoteResourceLoader {
                 completion(.failure(Error.connectivity))
             }
         }
+    }
+}
+
+private class ListMapper {
+    static func map(_ data: Data, _ response: HTTPURLResponse) throws -> List {
+        guard response.statusCode == 200 else {
+            throw RemoteResourceLoader.Error.invalidData
+        }
+        
+        return try JSONDecoder().decode(List.self, from: data)
     }
 }
