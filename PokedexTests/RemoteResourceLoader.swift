@@ -109,6 +109,21 @@ class RemoteResourceLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_doesNotDeliverResultAfterInstanceHasBeenDeallocated() {
+        let url = URL(string: "http:s.com")!
+        let client = HTTPClientSpy()
+        var sut: RemoteResourceLoader? = RemoteResourceLoader(url: url, client: client)
+        
+        var capturedResults = [RemoteResourceLoader.Result]()
+        sut?.load { capturedResults.append($0) }
+        
+        sut = nil
+        
+        client.complete(withStatusCode: 200, data: makeJson(items: []))
+        
+        XCTAssertTrue(capturedResults.isEmpty)
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://test.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteResourceLoader, client: HTTPClientSpy) {
