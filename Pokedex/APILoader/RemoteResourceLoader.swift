@@ -7,16 +7,7 @@
 
 import Foundation
 
-enum ResourceLoaderResult {
-    case success(List)
-    case error(Error)
-}
-
-protocol ResourceLoader {
-    func load(completion: @escaping (ResourceLoaderResult) -> Void)
-}
-
-public final class RemoteResourceLoader {
+public final class RemoteResourceLoader: ResourceItem {
     private let url: URL
     private let client: HTTPClient
     
@@ -25,10 +16,7 @@ public final class RemoteResourceLoader {
         case invalidData
     }
     
-    public enum Result: Equatable {
-        case success(List)
-        case failure(Error)
-    }
+    public typealias Result = ResourceItemResult
     
     public init(url: URL, client: HTTPClient) {
         self.client = client

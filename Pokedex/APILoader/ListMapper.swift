@@ -14,7 +14,7 @@ final class ListMapper {
     static func map(_ data: Data, response: HTTPURLResponse) -> RemoteResourceLoader.Result {
         guard response.statusCode == OK_200,
               let list = try? JSONDecoder().decode(List.self, from: data) else {
-            return .failure(.invalidData)
+            return .failure(RemoteResourceLoader.Error.invalidData)
         }
         
         return .success(list)

@@ -42,7 +42,7 @@ class RemoteResourceLoaderTests: XCTestCase {
         
         let (sut, client) = makeSUT(url: url)
         
-        expect(sut, toCompleteWith: .failure(.connectivity), when: {
+        expect(sut, toCompleteWith: .failure(RemoteResourceLoader.Error.connectivity), when: {
         
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: clientError)
@@ -58,7 +58,7 @@ class RemoteResourceLoaderTests: XCTestCase {
         
         [199, 201, 300, 400, 500].enumerated().forEach { (index, code) in
             
-            expect(sut, toCompleteWith: .failure(.invalidData), when: {
+            expect(sut, toCompleteWith: .failure(RemoteResourceLoader.Error.invalidData), when: {
                 client.complete(withStatusCode: code, data: listJson, at: index)
             })
         }
@@ -67,7 +67,7 @@ class RemoteResourceLoaderTests: XCTestCase {
     func test_load_deliversErrorOnHTTP200WithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(.invalidData), when: {
+        expect(sut, toCompleteWith: .failure(RemoteResourceLoader.Error.invalidData), when: {
             let invalidJSON = Data("invalid json".utf8)
             
             client.complete(withStatusCode: 200, data: invalidJSON)
@@ -148,12 +148,24 @@ class RemoteResourceLoaderTests: XCTestCase {
     }
     
     private func expect(_ sut: RemoteResourceLoader, toCompleteWith result: RemoteResourceLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        var capturedResults = [RemoteResourceLoader.Result]()
-        sut.load { capturedResults.append($0) }
+        
+        let exp = expectation(description: "wait for completion")
+        
+        sut.load { receivedResult in
+            switch (receivedResult, result) {
+            case let (.success(receivedItems), .success(expectedITems)):
+                XCTAssertEqual(receivedItems, expectedITems, file: file, line: line)
+            case let (.failure(receivedError as RemoteResourceLoader.Error), .failure(expectedError as RemoteResourceLoader.Error)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+            default :
+                XCTFail("Expected result \(result) got \(receivedResult)", file: file, line: line)
+            }
+            exp.fulfill()
+        }
         
         action()
         
-        XCTAssertEqual(capturedResults, [result], file: file, line: line)
+        wait(for: [exp], timeout: 1.0)
     }
     
     private class HTTPClientSpy: HTTPClient {
