@@ -41,15 +41,14 @@ class RemoteResourceLoaderTests: XCTestCase {
         let url = URL(string: "https://pokeapi.co/api/v2/pokemon")!
         
         let (sut, client) = makeSUT(url: url)
-        client.error = NSError(domain: "Test", code: 0)
         
-        var capturedError: RemoteResourceLoader.Error?
+        var capturedErrors = [RemoteResourceLoader.Error]()
+        sut.load { capturedErrors.append($0) }
         
-        sut.load { error in capturedError = error }
+        let clientError = NSError(domain: "Test", code: 0)
+        client.complete(with: clientError)
         
-        XCTAssertEqual(capturedError, .connectivity)
-        
-        
+        XCTAssertEqual(capturedErrors, [.connectivity])
     }
     
     // MARK: Helpers
@@ -62,14 +61,17 @@ class RemoteResourceLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        var requestedURLs = [URL]()
-        var error: Error?
+        private var messages = [(url: URL, completion: (Error) ->Void)]()
+        var requestedURLs: [URL] {
+            return messages.map { $0.url }
+        }
         
         func get(from url: URL, completion: @escaping (Error) -> Void) {
-            if let error = error {
-                completion(error)
-            }
-            requestedURLs.append(url)
+            messages.append((url, completion))
+        }
+        
+        func complete(with error: Error, at index: Int = 0) {
+            messages[index].completion(error)
         }
     }
 }
