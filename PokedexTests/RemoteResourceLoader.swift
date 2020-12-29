@@ -42,13 +42,11 @@ class RemoteResourceLoaderTests: XCTestCase {
         
         let (sut, client) = makeSUT(url: url)
         
-        var capturedErrors = [RemoteResourceLoader.Error]()
-        sut.load { capturedErrors.append($0) }
+        expect(sut, toCompleteWithError: .connectivity, when: {
         
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
-        
-        XCTAssertEqual(capturedErrors, [.connectivity])
+            let clientError = NSError(domain: "Test", code: 0)
+            client.complete(with: clientError)
+        })
     }
     
     func test_load_deliversErrorOnNonHTTP200() {
@@ -58,13 +56,21 @@ class RemoteResourceLoaderTests: XCTestCase {
         
         [199, 200, 300, 400, 500].enumerated().forEach { (index, code) in
             
-            var capturedErrors = [RemoteResourceLoader.Error]()
-            sut.load { capturedErrors.append($0) }
-            
-            client.complete(withStatusCode: code, at: index)
-            
-            XCTAssertEqual(capturedErrors, [.invalidData])
+            expect(sut, toCompleteWithError: .invalidData, when: {
+                client.complete(withStatusCode: code, at: index)
+            })
         }
+    }
+    
+    func test_load_deliversErrorOnHTTP200WithInvalidJSON() {
+        let (sut, client) = makeSUT()
+        
+        expect(sut, toCompleteWithError: .invalidData, when: {
+            let invalidJSON = Data("invalid json".utf8)
+            
+            client.complete(withStatusCode: 200, data: invalidJSON)
+        })
+        
     }
     
     // MARK: Helpers
@@ -74,6 +80,15 @@ class RemoteResourceLoaderTests: XCTestCase {
         let sut =  RemoteResourceLoader(url: url, client: client)
         
         return (sut, client)
+    }
+    
+    private func expect(_ sut: RemoteResourceLoader, toCompleteWithError error: RemoteResourceLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        var capturedErrors = [RemoteResourceLoader.Error]()
+        sut.load { capturedErrors.append($0) }
+        
+        action()
+        
+        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
     }
     
     private class HTTPClientSpy: HTTPClient {
@@ -90,12 +105,12 @@ class RemoteResourceLoaderTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode code: Int, at index: Int = 0) {
+        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
             let response = HTTPURLResponse(url: requestedURLs[index],
                                            statusCode: code,
                                            httpVersion: nil,
                                            headerFields: nil)!
-            messages[index].completion(.sucess(response))
+            messages[index].completion(.sucess(data, response))
         }
     }
 }
