@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class DetailItemLoader: DetailItemLoader {
+public final class DetailItemLoader: DetailItemProtocol {
     private let url: URL
     private let client: HTTPClient
     

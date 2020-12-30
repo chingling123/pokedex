@@ -8,7 +8,7 @@
 import Foundation
 
 public struct DetailItem: Equatable, Decodable {
-    public let abilities: [Ability]
+    public let abilities: [Abilities]
     public let base_experience: Int
     public let height: Int
     public let id: Int

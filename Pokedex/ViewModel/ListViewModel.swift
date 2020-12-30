@@ -41,6 +41,7 @@ class ListViewModel {
     
     func loadNextPage() {
         guard let hasNextP = self.nextPage else { return }
+        print(hasNextP.absoluteURL)
         self.loader = RemoteResourceLoader(url: hasNextP, client: client)
         self.loadList()
     }

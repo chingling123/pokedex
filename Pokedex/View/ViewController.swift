@@ -121,6 +121,6 @@ extension ViewController: ListViewModelDelegate {
     }
     
     func didnLoad() {
-        
+        ErrorMessage.show(msg: "Erro ao carregar dados", viewC: self)
     }
 }

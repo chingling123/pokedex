@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F03885FA259CE5FB0053209C /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03885F9259CE5FB0053209C /* DetailViewModel.swift */; };
+		F03885FF259CE66E0053209C /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03885FE259CE66E0053209C /* ErrorMessage.swift */; };
 		F0521D56259B76DF000EEFE3 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0521D55259B76DF000EEFE3 /* Resource.swift */; };
 		F0521D5F259B7773000EEFE3 /* RemoteResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0521D5E259B7773000EEFE3 /* RemoteResourceLoader.swift */; };
 		F0521D64259B7863000EEFE3 /* RemoteResourceLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0521D63259B7863000EEFE3 /* RemoteResourceLoaderTests.swift */; };
@@ -53,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F03885F9259CE5FB0053209C /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		F03885FE259CE66E0053209C /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		F0521D55259B76DF000EEFE3 /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		F0521D5E259B7773000EEFE3 /* RemoteResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteResourceLoader.swift; sourceTree = "<group>"; };
 		F0521D63259B7863000EEFE3 /* RemoteResourceLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteResourceLoaderTests.swift; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 				F0FBA377259CCE20007FF264 /* DetailMapper.swift */,
 				F0FBA37C259CCE91007FF264 /* DetailItemProtocol.swift */,
 				F0FBA381259CCF18007FF264 /* DetailItemLoader.swift */,
+				F03885FE259CE66E0053209C /* ErrorMessage.swift */,
 			);
 			path = APILoader;
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				F0FBA359259CADEB007FF264 /* ListViewModel.swift */,
+				F03885F9259CE5FB0053209C /* DetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -368,8 +374,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0FBA364259CC974007FF264 /* DetailViewController.swift in Sources */,
+				F03885FF259CE66E0053209C /* ErrorMessage.swift in Sources */,
 				F07643EC259B69ED00ADC552 /* ViewController.swift in Sources */,
 				F0FBA373259CCC9A007FF264 /* Sprites.swift in Sources */,
+				F03885FA259CE5FB0053209C /* DetailViewModel.swift in Sources */,
 				F0FBA37D259CCE91007FF264 /* DetailItemProtocol.swift in Sources */,
 				F0FBA382259CCF18007FF264 /* DetailItemLoader.swift in Sources */,
 				F0FBA378259CCE20007FF264 /* DetailMapper.swift in Sources */,
