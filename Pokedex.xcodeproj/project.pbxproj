@@ -26,6 +26,13 @@
 		F076440A259B69EE00ADC552 /* PokedexUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0764409259B69EE00ADC552 /* PokedexUITests.swift */; };
 		F0FBA35A259CADEB007FF264 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA359259CADEB007FF264 /* ListViewModel.swift */; };
 		F0FBA35F259CAE71007FF264 /* ListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA35E259CAE71007FF264 /* ListViewModelTests.swift */; };
+		F0FBA364259CC974007FF264 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA363259CC974007FF264 /* DetailViewController.swift */; };
+		F0FBA369259CCBB6007FF264 /* Ability.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA368259CCBB6007FF264 /* Ability.swift */; };
+		F0FBA36E259CCC0D007FF264 /* DetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA36D259CCC0D007FF264 /* DetailItem.swift */; };
+		F0FBA373259CCC9A007FF264 /* Sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA372259CCC9A007FF264 /* Sprites.swift */; };
+		F0FBA378259CCE20007FF264 /* DetailMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA377259CCE20007FF264 /* DetailMapper.swift */; };
+		F0FBA37D259CCE91007FF264 /* DetailItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA37C259CCE91007FF264 /* DetailItemProtocol.swift */; };
+		F0FBA382259CCF18007FF264 /* DetailItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FBA381259CCF18007FF264 /* DetailItemLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +78,13 @@
 		F076440B259B69EE00ADC552 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0FBA359259CADEB007FF264 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		F0FBA35E259CAE71007FF264 /* ListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModelTests.swift; sourceTree = "<group>"; };
+		F0FBA363259CC974007FF264 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		F0FBA368259CCBB6007FF264 /* Ability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ability.swift; sourceTree = "<group>"; };
+		F0FBA36D259CCC0D007FF264 /* DetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailItem.swift; sourceTree = "<group>"; };
+		F0FBA372259CCC9A007FF264 /* Sprites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sprites.swift; sourceTree = "<group>"; };
+		F0FBA377259CCE20007FF264 /* DetailMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMapper.swift; sourceTree = "<group>"; };
+		F0FBA37C259CCE91007FF264 /* DetailItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailItemProtocol.swift; sourceTree = "<group>"; };
+		F0FBA381259CCF18007FF264 /* DetailItemLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailItemLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +116,9 @@
 			isa = PBXGroup;
 			children = (
 				F0521D55259B76DF000EEFE3 /* Resource.swift */,
+				F0FBA368259CCBB6007FF264 /* Ability.swift */,
+				F0FBA36D259CCC0D007FF264 /* DetailItem.swift */,
+				F0FBA372259CCC9A007FF264 /* Sprites.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -111,6 +128,7 @@
 			children = (
 				F07643EB259B69ED00ADC552 /* ViewController.swift */,
 				F0521DA9259CA98E000EEFE3 /* ViewCodeProtocol.swift */,
+				F0FBA363259CC974007FF264 /* DetailViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -122,6 +140,9 @@
 				F0521D6B259BCE11000EEFE3 /* HTTPClient.swift */,
 				F0521D70259BCE3D000EEFE3 /* ListMapper.swift */,
 				F0521D90259C0B96000EEFE3 /* URLSessionHTTPClient.swift */,
+				F0FBA377259CCE20007FF264 /* DetailMapper.swift */,
+				F0FBA37C259CCE91007FF264 /* DetailItemProtocol.swift */,
+				F0FBA381259CCF18007FF264 /* DetailItemLoader.swift */,
 			);
 			path = APILoader;
 			sourceTree = "<group>";
@@ -346,7 +367,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0FBA364259CC974007FF264 /* DetailViewController.swift in Sources */,
 				F07643EC259B69ED00ADC552 /* ViewController.swift in Sources */,
+				F0FBA373259CCC9A007FF264 /* Sprites.swift in Sources */,
+				F0FBA37D259CCE91007FF264 /* DetailItemProtocol.swift in Sources */,
+				F0FBA382259CCF18007FF264 /* DetailItemLoader.swift in Sources */,
+				F0FBA378259CCE20007FF264 /* DetailMapper.swift in Sources */,
 				F0521D6C259BCE11000EEFE3 /* HTTPClient.swift in Sources */,
 				F0FBA35A259CADEB007FF264 /* ListViewModel.swift in Sources */,
 				F0521D81259BD55C000EEFE3 /* ResourceItemProtocol.swift in Sources */,
@@ -355,7 +381,9 @@
 				F0521DA4259CA6C5000EEFE3 /* ApplicationCoordinator.swift in Sources */,
 				F0521DAA259CA98E000EEFE3 /* ViewCodeProtocol.swift in Sources */,
 				F0521D56259B76DF000EEFE3 /* Resource.swift in Sources */,
+				F0FBA369259CCBB6007FF264 /* Ability.swift in Sources */,
 				F0521D5F259B7773000EEFE3 /* RemoteResourceLoader.swift in Sources */,
+				F0FBA36E259CCC0D007FF264 /* DetailItem.swift in Sources */,
 				F07643E8259B69ED00ADC552 /* AppDelegate.swift in Sources */,
 				F0521D9C259CA667000EEFE3 /* Coordinator.swift in Sources */,
 			);

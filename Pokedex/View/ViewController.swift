@@ -95,11 +95,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let hasItems = self.viewModel.listItems()
         if indexPath.row == (hasItems.count - 1) {
-                self.loadLabel.isHidden = false
-                self.viewModel.loadNextPage()
-            }
+            self.loadLabel.isHidden = false
+            self.viewModel.loadNextPage()
         }
+    }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let hasItem = self.viewModel.getItem(at: indexPath.row)
+        self.coordinator?.showDetail(item: hasItem)
+    }
 }
 
 extension ViewController: ListViewModelDelegate {

@@ -21,4 +21,10 @@ class ApplicationCoordinator: Coordinator {
         self.navBar.pushViewController(vc, animated: true)
     }
     
+    func showDetail(item: Item) {
+        let dvc = DetailViewController(item: item)
+        dvc.coordinator = self
+        self.navBar.pushViewController(dvc, animated: true)
+    }
+    
 }
