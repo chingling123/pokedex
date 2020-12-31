@@ -34,11 +34,6 @@ class ViewController: UIViewController {
         
         self.Setup()
         self.viewModel.delegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         self.viewModel.loadList()
     }
 
